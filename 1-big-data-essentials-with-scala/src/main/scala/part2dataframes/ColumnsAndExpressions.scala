@@ -14,7 +14,7 @@ object ColumnsAndExpressions extends App {
     .option("inferSchema", "true")
     .json("src/main/resources/data/cars.json")
 
-  carsDF.show()
+  //  carsDF.show()
 
   // Columns
   val firstColumn = carsDF.col("Name")
@@ -22,7 +22,7 @@ object ColumnsAndExpressions extends App {
   // selecting (projecting)
   val carsNameDF = carsDF.select(firstColumn)
 
-  carsNameDF.show()
+  //  carsNameDF.show()
 
   // various select methods
 
@@ -51,7 +51,7 @@ object ColumnsAndExpressions extends App {
     expr("Weight_in_lbs / 2.2").as("Weight_in_kg_2")
   )
 
-  carsWithWeightsDF.show()
+  //  carsWithWeightsDF.show()
 
   // selectExpr
   val carsWithSelectExprWeightsDF = carsDF.selectExpr(
@@ -92,6 +92,29 @@ object ColumnsAndExpressions extends App {
 
   // distinct values
   val allCountriesDF = carsDF.select("Origin").distinct()
-  allCountriesDF.show()
+  //  allCountriesDF.show()
+
+  /**
+   * Exercises
+   *
+   * 1. Read the movies DF and select 2 columns of your choice
+   * 2. Create another column summing up the total profit of the movies = US_Gross + Worldwide_Gross + US_DVD_Sales
+   * 3. Select all COMEDY movies with IMDB rating above 6
+   *
+   * Use as many versions as possible
+   */
+
+  val moviesDF = spark.read
+    .option("inferSchema", "true")
+    .json("src/main/resources/data/movies.json")
+
+  val movieTitlesAndReleaseDatesDF = moviesDF.select("Title", "Release_Date")
+  movieTitlesAndReleaseDatesDF.show()
+
+  val moviesWithTotalProfitDF = moviesDF.withColumn("Total_Profit", expr("US_Gross + Worldwide_Gross"))
+  moviesWithTotalProfitDF.show()
+
+  val comedyMoviesAboveRating6 = moviesDF.filter("Major_Genre = 'Comedy' and IMDB_Rating > 6")
+  comedyMoviesAboveRating6.show()
 
 }
