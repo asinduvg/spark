@@ -94,22 +94,54 @@ object DataSender {
     Thread.sleep(4000)
     printer.println("14000,blue")
     Thread.sleep(1000)
-    printer.println("9000,red")
+    printer.println("9000,red") // discarded: older than the watermark
     Thread.sleep(3000)
     printer.println("15000,red")
-    printer.println("8000,blue")
+    printer.println("8000,blue") // discarded: older than the watermark
     Thread.sleep(1000)
     printer.println("13000,green")
     Thread.sleep(500)
     printer.println("21000,green")
     Thread.sleep(3000)
-    printer.println("4000,purple") // expect to be dropped
+    printer.println("4000,purple") // expect to be dropped - It's older than the watermark
     Thread.sleep(2000)
     printer.println("17000,green")
   }
 
+  def example2() = {
+    printer.println("5000,red")
+    printer.println("5000,green")
+    printer.println("4000,blue")
+
+    Thread.sleep(7000)
+    printer.println("1000,yellow")
+    printer.println("2000,cyan")
+    printer.println("3000,magenta")
+    printer.println("5000,black")
+
+    Thread.sleep(3000)
+    printer.println("10000,pink")
+  }
+
+  def example3() = {
+    Thread.sleep(2000)
+    printer.println("9000,blue")
+    Thread.sleep(3000)
+    printer.println("2000,green")
+    printer.println("1000,blue")
+    printer.println("8000,red")
+    Thread.sleep(2000)
+    printer.println("5000,red") // discarded
+    printer.println("18000,blue")
+    Thread.sleep(1000)
+    printer.println("2000,green") // discarded
+    Thread.sleep(2000)
+    printer.println("30000,purple")
+    printer.println("10000,pink")
+  }
+
   def main(args: Array[String]): Unit = {
-    example1()
+    example3()
   }
 
 }
